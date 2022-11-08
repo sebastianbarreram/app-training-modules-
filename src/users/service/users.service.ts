@@ -30,19 +30,41 @@ export class UsersService {
     return this.users;
   }
   getUserByUuid(uuid: string): UserDto | undefined {
-    return this.users.find((user) => user.uuid == uuid);
+    return this.users.find((user: UserDto) => user.uuid == uuid);
   }
   createUser(newUser: UserDto): UserDto {
     this.users.push(newUser);
     return newUser;
   }
   updateUser(uuid: string, userUpdate: UserDto): UserDto | undefined {
-    const user = this.users.find((user) => user.uuid == uuid);
-    if (user != null && user != undefined) {
+    const user = this.users.find((user: UserDto) => user.uuid == uuid);
+    if (user != undefined) {
       user.nombre = userUpdate.nombre;
       user.apellido = userUpdate.apellido;
-      user.email = 'sssssssss';
+      user.email = userUpdate.email;
     }
     return user;
+  }
+  updatePatchUser(uuid: string, userUpdate: UserDto): UserDto | undefined {
+    const user = this.users.find((user: UserDto) => user.uuid == uuid);
+    if (user != undefined) {
+      const userPatch: UserDto = {
+        ...user,
+        ...userUpdate,
+      };
+      this.users = this.users.map((user: UserDto) => {
+        return user.uuid == uuid ? userPatch : user;
+      });
+      return userPatch;
+    }
+    return user;
+  }
+  deleteUser(uuid: string): boolean {
+    const userIndex = this.users.findIndex(
+      (user: UserDto) => user.uuid == uuid,
+    );
+    if (userIndex == -1) return false;
+    this.users.splice(userIndex, 1);
+    return true;
   }
 }

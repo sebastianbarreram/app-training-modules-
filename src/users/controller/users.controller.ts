@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   ValidationPipe,
@@ -46,5 +48,15 @@ export class UsersController {
   @Put('user/:uuid')
   updateUser(@Param('uuid') uuid: string, @Body() userUpdate: UserDto) {
     return this.usersService.updateUser(uuid, userUpdate);
+  }
+
+  @Patch('user/:uuid')
+  updatePatchUser(@Param('uuid') uuid: string, @Body() userUpdate: UserDto) {
+    return this.usersService.updatePatchUser(uuid, userUpdate);
+  }
+
+  @Delete('user/:uuid')
+  deleteUser(@Param('uuid') uuid: string): boolean {
+    return this.usersService.deleteUser(uuid);
   }
 }
